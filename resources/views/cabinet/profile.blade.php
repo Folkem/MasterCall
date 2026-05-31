@@ -43,7 +43,7 @@
                     @foreach($categories as $cat)
                     <label class="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
                         <input type="checkbox" name="categories[]" value="{{ $cat->id }}"
-                               {{ $profile->categories->contains($cat) || in_array($cat->id, old('categories', [])) ? 'checked' : '' }}
+                               {{ (session()->hasOldInput() ? in_array($cat->id, old('categories', [])) : $profile->categories->contains($cat)) ? 'checked' : '' }}
                                class="rounded border-slate-300 text-teal-600 focus:ring-teal-500">
                         {{ $cat->name }}
                     </label>
@@ -55,7 +55,7 @@
             <div class="mb-5">
                 <label class="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
                     <input type="checkbox" name="is_available" value="1"
-                           {{ old('is_available', $profile->is_available) ? 'checked' : '' }}
+                           {{ (session()->hasOldInput() ? old('is_available') : $profile->is_available) ? 'checked' : '' }}
                            class="rounded border-slate-300 text-teal-600 focus:ring-teal-500">
                     Доступний для замовлень
                 </label>

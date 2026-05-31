@@ -42,7 +42,7 @@
                     @foreach($categories as $cat)
                     <label class="flex items-center gap-2 text-sm cursor-pointer">
                         <input type="checkbox" name="categories[]" value="{{ $cat->id }}"
-                               {{ $profile && $profile->categories->contains($cat) || in_array($cat->id, old('categories', [])) ? 'checked' : '' }}
+                               {{ (session()->hasOldInput() ? in_array($cat->id, old('categories', [])) : ($profile && $profile->categories->contains($cat))) ? 'checked' : '' }}
                                class="rounded border-slate-300 text-teal-600 focus:ring-teal-500">
                         {{ $cat->name }}
                     </label>
@@ -57,10 +57,10 @@
                 @endif
                 <input type="file" name="photo" accept="image/*" class="text-sm text-slate-600">
             </div>
-            @if($profile?->photos->isNotEmpty())
             <div class="mb-4">
                 <p class="text-sm font-medium text-slate-700 mb-2">Галерея</p>
-                <div class="grid grid-cols-4 gap-2">
+                @if($profile?->photos->isNotEmpty())
+                <div class="grid grid-cols-4 gap-2 mb-3">
                     @foreach($profile->photos as $photo)
                     <div class="relative aspect-square rounded-lg overflow-hidden bg-slate-100 group">
                         <img src="{{ $photo->url() }}" alt="" class="w-full h-full object-cover">
@@ -74,8 +74,11 @@
                     </div>
                     @endforeach
                 </div>
+                @endif
+                <label class="block text-xs text-slate-500 mb-1">Додати фото до галереї</label>
+                <input type="file" name="galleries[]" accept="image/*" multiple class="text-sm text-slate-600">
+                @error('galleries.*') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
             </div>
-            @endif
             <div class="flex gap-3">
                 <button type="submit" class="rounded-lg bg-teal-600 text-white px-5 py-2.5 text-sm font-semibold hover:bg-teal-700 transition">Зберегти</button>
                 <a href="{{ route('admin.masters.index') }}" class="rounded-lg border border-slate-200 text-slate-600 px-5 py-2.5 text-sm font-medium hover:bg-slate-50 transition">Скасувати</a>

@@ -10,6 +10,7 @@ use App\Models\ServiceCategory;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
@@ -53,12 +54,16 @@ class MasterController extends Controller
             'categories' => ['required', 'array', 'min:1'],
             'categories.*' => ['exists:service_categories,id'],
             'photo' => ['nullable', 'image', 'max:2048'],
+            'galleries' => ['nullable', 'array'],
+            'galleries.*' => ['image', 'max:2048'],
         ], [
             'name.required' => "Ім'я обов'язкове.",
             'email.required' => 'Email обов\'язковий.',
             'email.unique' => 'Цей email вже використовується.',
             'city.required' => 'Місто обов\'язкове.',
             'categories.required' => 'Оберіть категорію.',
+            'galleries.*.image' => 'Файл галереї має бути зображенням.',
+            'galleries.*.max' => 'Розмір кожного фото не більше 2 МБ.',
         ]);
 
         $user = User::create([
@@ -85,6 +90,18 @@ class MasterController extends Controller
 
         $profile->categories()->sync($validated['categories']);
 
+        if ($request->hasFile('galleries')) {
+            $sortOrder = MasterPhoto::where('master_profile_id', $profile->id)->max('sort_order') + 1;
+            foreach ($request->file('galleries') as $file) {
+                /** @var UploadedFile $file */
+                MasterPhoto::create([
+                    'master_profile_id' => $profile->id,
+                    'photo_path' => $file->store('gallery', 'public'),
+                    'sort_order' => $sortOrder++,
+                ]);
+            }
+        }
+
         return redirect()->route('admin.masters.index')->with('success', 'Майстра створено.');
     }
 
@@ -110,10 +127,14 @@ class MasterController extends Controller
             'categories' => ['required', 'array', 'min:1'],
             'categories.*' => ['exists:service_categories,id'],
             'photo' => ['nullable', 'image', 'max:2048'],
+            'galleries' => ['nullable', 'array'],
+            'galleries.*' => ['image', 'max:2048'],
         ], [
             'name.required' => "Ім'я обов'язкове.",
             'city.required' => 'Місто обов\'язкове.',
             'categories.required' => 'Оберіть категорію.',
+            'galleries.*.image' => 'Файл галереї має бути зображенням.',
+            'galleries.*.max' => 'Розмір кожного фото не більше 2 МБ.',
         ]);
 
         $master->update(['name' => $validated['name'], 'phone' => $validated['phone']]);
@@ -135,6 +156,18 @@ class MasterController extends Controller
         ]);
 
         $profile->categories()->sync($validated['categories']);
+
+        if ($request->hasFile('galleries')) {
+            $sortOrder = MasterPhoto::where('master_profile_id', $profile->id)->max('sort_order') + 1;
+            foreach ($request->file('galleries') as $file) {
+                /** @var UploadedFile $file */
+                MasterPhoto::create([
+                    'master_profile_id' => $profile->id,
+                    'photo_path' => $file->store('gallery', 'public'),
+                    'sort_order' => $sortOrder++,
+                ]);
+            }
+        }
 
         return redirect()->route('admin.masters.index')->with('success', 'Майстра оновлено.');
     }
