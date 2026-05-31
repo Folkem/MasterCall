@@ -29,7 +29,7 @@
                 <label class="block text-sm font-medium text-slate-700 mb-1">Категорія</label>
                 <select name="category_id" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 @error('category_id') border-red-500 @enderror">
                     @foreach($categories as $cat)
-                        <option value="{{ $cat->id }}" {{ ($service && $service->category_id === $cat->id) || old('category_id') == $cat->id ? 'selected' : '' }}>
+                        <option value="{{ $cat->id }}" {{ (session()->hasOldInput() ? old('category_id') == $cat->id : ($service && $service->category_id === $cat->id)) ? 'selected' : '' }}>
                             {{ $cat->name }}
                         </option>
                     @endforeach

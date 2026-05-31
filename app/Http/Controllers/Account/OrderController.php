@@ -71,6 +71,10 @@ class OrderController extends Controller
 
         $service = isset($validated['service_id']) ? Service::find($validated['service_id']) : null;
 
+        if ($service) {
+            abort_unless((int) $service->master_id === (int) $validated['master_id'], 422);
+        }
+
         $booking = Booking::create([
             'client_id' => auth()->id(),
             'master_id' => $validated['master_id'],

@@ -91,6 +91,9 @@ class BookingSeeder extends Seeder
                 'description' => $descriptions[array_rand($descriptions)],
                 'price' => $service ? $service->price : rand(200, 2000),
                 'status' => $status,
+                'stripe_session_id' => in_array($status, [OrderStatus::Confirmed, OrderStatus::InProgress, OrderStatus::Completed])
+                    ? 'cs_test_seed_'.str_pad((string) $i, 6, '0', STR_PAD_LEFT)
+                    : null,
                 'master_note' => in_array($status, [OrderStatus::Declined]) ? 'На жаль, не можу взяти це замовлення.' : null,
                 'started_at' => in_array($status, [OrderStatus::InProgress, OrderStatus::Completed]) ? now()->subHours(rand(1, 5)) : null,
                 'completed_at' => $status === OrderStatus::Completed ? now()->subHours(rand(0, 3)) : null,
