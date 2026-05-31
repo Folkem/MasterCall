@@ -90,4 +90,21 @@ class MasterProfile extends Model
     {
         return Service::where('master_id', $this->user_id)->min('price');
     }
+
+    public function yearsLabel(): string
+    {
+        $n = $this->years_experience;
+        $lastTwo = $n % 100;
+        $lastOne = $n % 10;
+
+        if ($lastTwo >= 11 && $lastTwo <= 19) {
+            return "{$n} років";
+        }
+
+        return match ($lastOne) {
+            1 => "{$n} рік",
+            2, 3, 4 => "{$n} роки",
+            default => "{$n} років",
+        };
+    }
 }

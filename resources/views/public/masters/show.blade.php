@@ -49,7 +49,7 @@
                     @if($profile->years_experience > 0)
                         <p class="text-sm text-slate-600 mt-3 flex items-center gap-1">
                             @include('components.icon', ['name' => 'clock', 'class' => 'w-4 h-4'])
-                            {{ $profile->years_experience }} {{ $profile->years_experience === 1 ? 'рік' : ($profile->years_experience < 5 ? 'роки' : 'років') }} досвіду
+                            {{ $profile->yearsLabel() }} досвіду
                         </p>
                     @endif
 

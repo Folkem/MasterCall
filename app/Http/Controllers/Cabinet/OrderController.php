@@ -9,6 +9,7 @@ use App\Notifications\OrderStatusNotification;
 use App\Services\BookingService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class OrderController extends Controller
@@ -60,7 +61,12 @@ class OrderController extends Controller
             'price.min' => 'Ціна має бути більше 0.',
         ]);
 
-        $this->bookingService->accept($order, (float) $request->price, $request->master_note);
+        try {
+            $this->bookingService->accept($order, (float) $request->price, $request->master_note);
+        } catch (ValidationException $e) {
+            return redirect()->route('cabinet.orders.show', $order)
+                ->with('error', collect($e->errors())->flatten()->first());
+        }
 
         $order->client->notify(new OrderStatusNotification($order, 'Замовлення прийнято майстром'));
 
@@ -77,7 +83,12 @@ class OrderController extends Controller
             'master_note.required' => 'Причина відмови обов\'язкова.',
         ]);
 
-        $this->bookingService->decline($order, $request->master_note);
+        try {
+            $this->bookingService->decline($order, $request->master_note);
+        } catch (ValidationException $e) {
+            return redirect()->route('cabinet.orders.show', $order)
+                ->with('error', collect($e->errors())->flatten()->first());
+        }
 
         $order->client->notify(new OrderStatusNotification($order, 'Замовлення відхилено'));
 
@@ -88,7 +99,12 @@ class OrderController extends Controller
     {
         abort_unless($order->master_id === auth()->id(), 403);
 
-        $this->bookingService->start($order);
+        try {
+            $this->bookingService->start($order);
+        } catch (ValidationException $e) {
+            return redirect()->route('cabinet.orders.show', $order)
+                ->with('error', collect($e->errors())->flatten()->first());
+        }
 
         return redirect()->route('cabinet.orders.show', $order)->with('success', 'Виконання розпочато.');
     }
@@ -97,7 +113,12 @@ class OrderController extends Controller
     {
         abort_unless($order->master_id === auth()->id(), 403);
 
-        $this->bookingService->complete($order);
+        try {
+            $this->bookingService->complete($order);
+        } catch (ValidationException $e) {
+            return redirect()->route('cabinet.orders.show', $order)
+                ->with('error', collect($e->errors())->flatten()->first());
+        }
 
         $order->client->notify(new OrderStatusNotification($order, 'Замовлення виконано'));
 

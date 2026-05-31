@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Services\ReviewService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class ReviewController extends Controller
@@ -16,6 +17,7 @@ class ReviewController extends Controller
 
     public function create(Request $request): View
     {
+        abort_if(! $request->filled('master'), 404);
         $master = User::findOrFail($request->master);
         $existing = Review::where('client_id', auth()->id())->where('master_id', $master->id)->first();
 
@@ -36,7 +38,11 @@ class ReviewController extends Controller
 
         $master = User::findOrFail($request->master_id);
 
-        $this->reviewService->store(auth()->user(), $master, (int) $request->rating, $request->comment);
+        try {
+            $this->reviewService->store(auth()->user(), $master, (int) $request->rating, $request->comment);
+        } catch (ValidationException $e) {
+            return back()->withInput()->with('error', collect($e->errors())->flatten()->first());
+        }
 
         return redirect()->route('masters.show', $master)->with('success', 'Відгук збережено.');
     }

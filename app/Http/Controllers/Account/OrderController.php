@@ -13,6 +13,7 @@ use App\Notifications\NewOrderNotification;
 use App\Services\BookingService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class OrderController extends Controller
@@ -37,6 +38,7 @@ class OrderController extends Controller
 
     public function create(Request $request): View
     {
+        abort_if(! $request->filled('master'), 404);
         $master = User::findOrFail($request->master);
         abort_unless($master->isMaster() && $master->is_active, 404);
 
@@ -110,7 +112,12 @@ class OrderController extends Controller
     {
         abort_unless($order->client_id === auth()->id(), 403);
 
-        $this->bookingService->cancel($order);
+        try {
+            $this->bookingService->cancel($order);
+        } catch (ValidationException $e) {
+            return redirect()->route('account.orders.show', $order)
+                ->with('error', collect($e->errors())->flatten()->first());
+        }
 
         return redirect()->route('account.orders.show', $order)->with('success', 'Замовлення скасовано.');
     }
