@@ -67,7 +67,7 @@ class MasterController extends Controller
         $reviews = Review::with('client')
             ->where('master_id', $master->id)
             ->latest()
-            ->get();
+            ->paginate(10);
 
         $isFavorite = auth()->check()
             ? Favorite::where('client_id', auth()->id())->where('master_id', $master->id)->exists()

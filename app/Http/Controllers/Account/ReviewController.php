@@ -19,6 +19,7 @@ class ReviewController extends Controller
     {
         abort_if(! $request->filled('master'), 404);
         $master = User::findOrFail($request->master);
+        abort_unless($master->isMaster() && $master->is_active, 404);
         $existing = Review::where('client_id', auth()->id())->where('master_id', $master->id)->first();
 
         return view('account.reviews.create', compact('master', 'existing'));
@@ -37,6 +38,7 @@ class ReviewController extends Controller
         ]);
 
         $master = User::findOrFail($request->master_id);
+        abort_unless($master->isMaster(), 403);
 
         try {
             $this->reviewService->store(auth()->user(), $master, (int) $request->rating, $request->comment);

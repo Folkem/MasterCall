@@ -150,7 +150,7 @@
             {{-- Reviews --}}
             <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5">
                 <div class="flex items-center justify-between mb-4">
-                    <h2 class="font-semibold text-slate-800" style="font-family: 'Space Grotesk', sans-serif;">Відгуки ({{ $reviews->count() }})</h2>
+                    <h2 class="font-semibold text-slate-800" style="font-family: 'Space Grotesk', sans-serif;">Відгуки ({{ $reviews->total() }})</h2>
                     @auth
                         @if(auth()->user()->isClient())
                         <a href="{{ route('account.reviews.create', ['master' => $master->id]) }}"
@@ -181,6 +181,9 @@
                 @empty
                 <div class="text-center py-6 text-slate-400 text-sm">Відгуків ще немає</div>
                 @endforelse
+                @if($reviews->hasPages())
+                <div class="mt-4 pt-3 border-t border-slate-100">{{ $reviews->withQueryString()->links() }}</div>
+                @endif
             </div>
         </div>
     </div>
