@@ -14,13 +14,13 @@ return new class extends Migration
             $table->foreignId('master_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('service_id')->nullable()->constrained('services')->nullOnDelete();
             $table->foreignId('category_id')->constrained('service_categories');
-            $table->string('address');
+            $table->string('address', 500);
             $table->dateTime('scheduled_at');
             $table->text('description');
             $table->decimal('price', 10, 2)->nullable();
             $table->string('status')->default('pending');
             $table->string('stripe_session_id')->nullable();
-            $table->string('master_note')->nullable();
+            $table->text('master_note')->nullable();
             $table->dateTime('started_at')->nullable();
             $table->dateTime('completed_at')->nullable();
             $table->timestamps();

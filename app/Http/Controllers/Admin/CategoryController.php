@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Booking;
 use App\Models\ServiceCategory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -60,6 +61,10 @@ class CategoryController extends Controller
 
     public function destroy(ServiceCategory $category): RedirectResponse
     {
+        if (Booking::where('category_id', $category->id)->exists()) {
+            return back()->with('error', 'Не можна видалити категорію, що має замовлення. Спочатку переведіть або видаліть пов\'язані замовлення.');
+        }
+
         $category->delete();
 
         return back()->with('success', 'Категорію видалено.');
