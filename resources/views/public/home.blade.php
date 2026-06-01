@@ -10,7 +10,7 @@
     <p class="text-slate-300 text-lg mb-8 max-w-2xl mx-auto">Знайдіть перевіреного майстра для будь-якого ремонту та обслуговування.</p>
     <form method="GET" action="{{ route('masters.index') }}" class="max-w-xl mx-auto flex gap-2">
         <input type="text" name="search" placeholder="Пошук майстра або послуги..."
-               class="flex-1 rounded-lg px-4 py-3 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400">
+               class="flex-1 rounded-lg px-4 py-3 bg-white text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400">
         <button type="submit" class="rounded-lg bg-yellow-400 text-slate-900 px-6 py-3 font-semibold hover:bg-yellow-300 transition flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             Знайти

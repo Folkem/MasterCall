@@ -6,7 +6,7 @@
     <title>@yield('title', 'MasterCall') — Виклик майстра</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-full bg-slate-50 text-slate-900" style="font-family: 'Inter', sans-serif;">
+<body class="min-h-screen flex flex-col bg-slate-50 text-slate-900" style="font-family: 'Inter', sans-serif;">
 
 {{-- Flash Toast --}}
 @if(session('success') || session('error') || session('info'))
@@ -39,8 +39,8 @@
 
 {{-- Header --}}
 <header class="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16" x-data="{ mobileOpen: false }">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" x-data="{ mobileOpen: false }">
+        <div class="flex items-center justify-between h-16">
             {{-- Brand --}}
             <a href="{{ route('home') }}" class="flex items-center gap-2 font-bold text-xl text-teal-700" style="font-family: 'Space Grotesk', sans-serif;">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
@@ -112,12 +112,12 @@
 </header>
 
 {{-- Main --}}
-<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
     @yield('content')
 </main>
 
 {{-- Footer --}}
-<footer class="bg-slate-900 text-slate-400 mt-16">
+<footer class="bg-slate-900 text-slate-400 mt-auto">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div class="flex flex-col md:flex-row items-start justify-between gap-6">
             <div>

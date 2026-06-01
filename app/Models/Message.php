@@ -34,4 +34,16 @@ class Message extends Model
     {
         return $this->belongsTo(User::class, 'sender_id');
     }
+
+    public function formattedTime(): string
+    {
+        if ($this->created_at->isToday()) {
+            return $this->created_at->format('H:i');
+        }
+        if ($this->created_at->isYesterday()) {
+            return 'Вчора '.$this->created_at->format('H:i');
+        }
+
+        return $this->created_at->format('d.m.Y H:i');
+    }
 }

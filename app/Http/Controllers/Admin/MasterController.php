@@ -179,4 +179,14 @@ class MasterController extends Controller
 
         return back()->with('success', 'Фото видалено.');
     }
+
+    public function toggleActive(User $master): RedirectResponse
+    {
+        abort_unless($master->isMaster(), 404);
+
+        $master->update(['is_active' => ! $master->is_active]);
+        $status = $master->is_active ? 'активовано' : 'деактивовано';
+
+        return back()->with('success', "Майстра {$status}.");
+    }
 }

@@ -26,6 +26,13 @@
                 <p class="text-slate-600">Пн–Пт: 9:00 – 18:00</p>
             </div>
         </div>
+        <div class="flex items-center gap-4">
+            @include('components.icon', ['name' => 'mail', 'class' => 'w-6 h-6 text-teal-600 shrink-0'])
+            <div>
+                <p class="font-semibold text-slate-800">Електронна пошта</p>
+                <p class="text-slate-600">info@mastercall.com.ua</p>
+            </div>
+        </div>
         <div class="pt-4 border-t border-slate-100">
             <p class="text-slate-600 text-sm">Для технічної підтримки або питань щодо послуг напишіть нам. Ми відповідаємо протягом 24 годин.</p>
         </div>

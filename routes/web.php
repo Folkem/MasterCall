@@ -73,7 +73,10 @@ Route::middleware(['auth', 'role:client'])->prefix('checkout')->name('checkout.'
 });
 
 // Messages (shared between client and master)
-Route::middleware('auth')->post('/orders/{order}/messages', [MessageController::class, 'store'])->name('messages.store');
+Route::middleware('auth')->group(function () {
+    Route::post('/orders/{order}/messages', [MessageController::class, 'store'])->name('messages.store');
+    Route::get('/orders/{order}/messages/poll', [MessageController::class, 'poll'])->name('messages.poll');
+});
 
 // Cabinet (master)
 Route::middleware(['auth', 'role:master'])->prefix('cabinet')->name('cabinet.')->group(function () {
@@ -106,6 +109,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::post('/masters', [AdminMasterController::class, 'store'])->name('masters.store');
     Route::get('/masters/{master}/edit', [AdminMasterController::class, 'edit'])->name('masters.edit');
     Route::put('/masters/{master}', [AdminMasterController::class, 'update'])->name('masters.update');
+    Route::post('/masters/{master}/toggle-active', [AdminMasterController::class, 'toggleActive'])->name('masters.toggleActive');
     Route::delete('/masters/photos/{photo}', [AdminMasterController::class, 'deletePhoto'])->name('masters.photos.delete');
 
     Route::get('/clients', [ClientController::class, 'index'])->name('clients.index');

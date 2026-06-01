@@ -44,6 +44,12 @@
                 </td>
                 <td class="px-4 py-3 text-right">
                     <a href="{{ route('admin.masters.edit', $master) }}" class="text-teal-600 hover:text-teal-800 text-sm font-medium">Редагувати</a>
+                    <form method="POST" action="{{ route('admin.masters.toggleActive', $master) }}" class="inline">
+                        @csrf
+                        <button type="submit" class="text-sm {{ $master->is_active ? 'text-red-600 hover:text-red-800' : 'text-emerald-600 hover:text-emerald-800' }} font-medium ml-3">
+                            {{ $master->is_active ? 'Деактивувати' : 'Активувати' }}
+                        </button>
+                    </form>
                 </td>
             </tr>
             @empty
