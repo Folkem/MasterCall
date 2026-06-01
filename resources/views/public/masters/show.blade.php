@@ -2,7 +2,24 @@
 @section('title', $master->name)
 
 @section('content')
-<div class="max-w-5xl mx-auto">
+<div class="max-w-5xl mx-auto"
+     x-data="{
+         open: false,
+         mode: 'gallery',
+         galleryPhotos: {{ Js::from($profile->photos->map(fn($p) => $p->url())->values()) }},
+         profileSrc: '{{ $profile->photoUrl() }}',
+         current: 0,
+         get src() { return this.mode === 'gallery' ? this.galleryPhotos[this.current] : this.profileSrc; },
+         showProfile() { this.mode = 'single'; this.open = true; },
+         showGallery(idx) { this.mode = 'gallery'; this.current = idx; this.open = true; },
+         prev() { this.current = (this.current - 1 + this.galleryPhotos.length) % this.galleryPhotos.length; },
+         next() { this.current = (this.current + 1) % this.galleryPhotos.length; },
+         close() { this.open = false; }
+     }"
+     @keydown.escape.window="close()"
+     @keydown.arrow-left.window="if(open && mode === 'gallery' && galleryPhotos.length > 1) prev()"
+     @keydown.arrow-right.window="if(open && mode === 'gallery' && galleryPhotos.length > 1) next()">
+
     {{-- Back --}}
     <a href="{{ route('masters.index') }}" class="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-teal-700 mb-6 transition">
         @include('components.icon', ['name' => 'arrow-left', 'class' => 'w-4 h-4'])
@@ -13,8 +30,8 @@
         {{-- Left column --}}
         <div class="lg:col-span-1 space-y-4">
             <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
-                <div class="h-64 bg-slate-100">
-                    <img src="{{ $profile->photoUrl() }}" alt="{{ $master->name }}" class="w-full h-full object-cover">
+                <div class="h-64 bg-slate-100 overflow-hidden cursor-zoom-in" @click="showProfile()">
+                    <img src="{{ $profile->photoUrl() }}" alt="{{ $master->name }}" class="w-full h-full object-cover hover:scale-105 transition duration-300">
                 </div>
                 <div class="p-5">
                     <div class="flex items-start justify-between">
@@ -139,7 +156,7 @@
                 <h2 class="font-semibold text-slate-800 mb-4" style="font-family: 'Space Grotesk', sans-serif;">Портфоліо</h2>
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                     @foreach($profile->photos as $photo)
-                    <div class="aspect-square rounded-lg overflow-hidden bg-slate-100">
+                    <div class="aspect-square rounded-lg overflow-hidden bg-slate-100 cursor-zoom-in" @click="showGallery({{ $loop->index }})">
                         <img src="{{ $photo->url() }}" alt="Робота майстра" class="w-full h-full object-cover hover:scale-105 transition duration-300">
                     </div>
                     @endforeach
@@ -185,6 +202,47 @@
                 <div class="mt-4 pt-3 border-t border-slate-100">{{ $reviews->withQueryString()->links() }}</div>
                 @endif
             </div>
+        </div>
+    </div>
+
+    {{-- Lightbox overlay --}}
+    <div x-show="open"
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
+         @click.self="close()"
+         style="display:none;">
+
+        {{-- Close --}}
+        <button @click="close()" class="absolute top-4 right-4 text-white/60 hover:text-white transition">
+            @include('components.icon', ['name' => 'x', 'class' => 'w-7 h-7'])
+        </button>
+
+        {{-- Main image --}}
+        <img :src="src" alt="" class="max-h-[88vh] max-w-[88vw] object-contain rounded-lg shadow-2xl select-none">
+
+        {{-- Prev arrow --}}
+        <button x-show="mode === 'gallery' && galleryPhotos.length > 1"
+                @click.stop="prev()"
+                class="absolute left-4 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition bg-black/30 hover:bg-black/50 rounded-full p-2">
+            @include('components.icon', ['name' => 'chevron-left', 'class' => 'w-7 h-7'])
+        </button>
+
+        {{-- Next arrow --}}
+        <button x-show="mode === 'gallery' && galleryPhotos.length > 1"
+                @click.stop="next()"
+                class="absolute right-4 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition bg-black/30 hover:bg-black/50 rounded-full p-2">
+            @include('components.icon', ['name' => 'chevron-right', 'class' => 'w-7 h-7'])
+        </button>
+
+        {{-- Counter --}}
+        <div x-show="mode === 'gallery' && galleryPhotos.length > 1"
+             class="absolute bottom-5 left-1/2 -translate-x-1/2 text-white/60 text-sm tabular-nums"
+             x-text="`${current + 1} / ${galleryPhotos.length}`">
         </div>
     </div>
 </div>
