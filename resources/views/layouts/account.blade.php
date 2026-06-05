@@ -29,7 +29,7 @@
             @endif
             <span class="text-sm text-slate-700">{{ session('success') ?? session('error') ?? session('info') }}</span>
         </div>
-        <button @click="show = false" class="pr-3 text-slate-400 hover:text-slate-600">
+        <button @@click="show = false" class="pr-3 text-slate-400 hover:text-slate-600">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
     </div>
@@ -59,7 +59,7 @@
                 </form>
             </div>
 
-            <button @click="mobileOpen = !mobileOpen" class="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100">
+            <button @@click="mobileOpen = !mobileOpen" class="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
         </div>
