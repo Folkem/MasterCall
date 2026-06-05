@@ -9,14 +9,14 @@
             @include('components.icon', ['name' => 'phone', 'class' => 'w-6 h-6 text-teal-600 shrink-0'])
             <div>
                 <p class="font-semibold text-slate-800">Телефон</p>
-                <p class="text-slate-600">+380 (50) 123-45-67</p>
+                <p class="text-slate-600">+380 (95) 999-99-99</p>
             </div>
         </div>
         <div class="flex items-center gap-4">
             @include('components.icon', ['name' => 'map-pin', 'class' => 'w-6 h-6 text-teal-600 shrink-0'])
             <div>
                 <p class="font-semibold text-slate-800">Адреса</p>
-                <p class="text-slate-600">вул. Хрещатик, 1, Київ</p>
+                <p class="text-slate-600">вул. Майстерня, 1, Київ</p>
             </div>
         </div>
         <div class="flex items-center gap-4">
