@@ -37,8 +37,8 @@
 @endif
 
 <header class="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16" x-data="{ mobileOpen: false }">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" x-data="{ mobileOpen: false }">
+        <div class="flex items-center justify-between h-16">
             <a href="{{ route('home') }}" class="flex items-center gap-2 font-bold text-xl text-teal-700" style="font-family: 'Space Grotesk', sans-serif;">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
                 MasterCall
@@ -63,7 +63,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
         </div>
-        <div x-show="mobileOpen" x-transition class="md:hidden pb-4 border-t border-slate-100 mt-1">
+        <div x-show="mobileOpen" x-cloak x-transition class="md:hidden pb-4 border-t border-slate-100 mt-1">
             <nav class="flex flex-col gap-2 pt-3 text-sm">
                 <a href="{{ route('account.orders.index') }}" class="text-slate-600 hover:text-teal-700 py-1">Замовлення</a>
                 <a href="{{ route('account.favorites') }}" class="text-slate-600 hover:text-teal-700 py-1">Обране</a>
