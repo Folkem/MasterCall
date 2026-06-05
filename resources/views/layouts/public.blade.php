@@ -135,5 +135,18 @@
     </div>
 </footer>
 
+    
+<script>
+(function () {
+    var btn = document.getElementById('mobile-menu-btn');
+    var menu = document.getElementById('mobile-menu');
+    if (!btn || !menu) return;
+    btn.addEventListener('click', function () { menu.classList.toggle('hidden'); });
+    menu.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () { menu.classList.add('hidden'); });
+    });
+})();
+</script>
+
 </body>
 </html>
